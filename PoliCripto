@@ -1,0 +1,76 @@
+/*
+Autor: Thomas Ferreira
+Data: 01/03/2023
+
+Descrição: Exercício "PoliCripto"
+*/
+
+#include <stdio.h>
+#include <string.h>
+
+void main()
+{
+    char letras[200], numeros[400]; //recebe as letras da linha de cima que precisarão ser descodificadas; números que farão a conversão
+    char alfabeto[26] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+    int numeros_aux[400], xpto = 0, xpto1 = 0, i = 0, j = 0, k = 0, l = 0, aux;
+
+    //RECEBENDO LINHA DE LETRAS E LINHA DE NÚMEROS
+    gets(letras); //Entra com as letras codificadas
+    gets(numeros); //Entra com os numeros para decodificação
+
+    //TRANSFORMANDO OS CARACTERES NUMÉRICOS EM INTEIROS PARA SEREM MANIPULADOS
+    while(xpto == 0){
+        if(numeros[0] != '+' && numeros[0] != '-') aux = 1; //sem sinal, o decodificador entende como um número positivo
+        if(numeros[i] == '+'){ //Verifica se o caractere está indicando que os números são positivos
+            i++; //vai para o caractere do lado (um número)
+            aux = 1; //Faz com que o número se torne positivo em uma conta à frente
+        }
+        if(numeros[i] == '-'){ //Verifica se o caractere está indicando que os numeros são negativos
+            i++; //vai para o caractere do lado (um número)
+            aux = -1; //Faz com que o número se torne negativo em uma conta à frente
+
+        }
+        numeros_aux[j] = (numeros[i] - '0')*aux; //Transforma o caractere em um inteiro positivo ou negativo
+
+        if(numeros[i] == NULL) xpto = 1; //Verifica se ainda há numeros
+        i++; //vai para o próximo número
+        j++; //vai para o próximo espaço para alocar um novo número
+    }
+
+    //zerando variáveis
+    i = 0;
+    j = 0;
+    xpto = 0;
+    aux = 0;
+
+    //DECODIFICANDO A MENSAGEM
+    printf("\n");
+    while(xpto == 0){ //condição para que o programa rode até acabar as letras que devem ser decodificadas
+        if(letras[i] == 'w'){ //vê se o caractere é "w", que signifa "espaço"
+            printf(" ");
+        }
+        else{
+            for(j = 0; j <= 25; j++){ //verifica qual o número, na ordem alfabética, que o caractere da vez se encontra e o guarda em uma variável aux
+                if(letras[i] == alfabeto[j]) aux = j;
+            }
+            if(aux + numeros_aux[l] > 25 || aux + numeros_aux[l] < 0){ //vê se o cálculo atingirá uma letra depois de z ou antes de a
+                if(aux + numeros_aux[l] > 25){ //caso ultrapasse o limite de letras do alfabeto (a - z; 0 - 25), calcula quantas letras faltam para atingir a letra (numericamente) desejada
+                    k = (aux + numeros_aux[l]) - 26; //número da posição no alfabeto da letra digitada + o valor que dita a distância da letra real, menos o alfabeto que teve que ser percorrido (26 letras)
+                    printf("%c", alfabeto[k]); //mostra a letra real de acordo com os números das posições no alfabeto
+                }
+                if(aux + numeros_aux[l] < 0){ //caso a letra seja inferior à primeira (a), o alfabeto começará a regredir (z - a; 25 - 0), até atingir a letra desejada (numericamente
+                    k = (aux + numeros_aux[i]) + 26; //número da posição no alfabeto da letra digitada + o valor que dita a distância da letra real, mais o alfabeto que devia ser percorrido para alcançar a letra real (26 letras)
+                    printf("%c", alfabeto[k]); //mostra a letra real de acordo com os números das posições no alfabeto
+                }
+            }
+            else{ //caso a número da posição da letra estiver dentro dos limites do alfabeto (>= 0 e <= 25), a lógica será mais simples
+                k = aux + numeros_aux[l]; //número da posição no alfabeto da letra digitada + o valor que dita a distância da letra real
+                printf("%c", alfabeto[k]); //mostra a letra real de acordo com os números das posições no alfabeto
+            }
+            l++; //avança para o próximo número da sequência digitada
+        }
+        i++; //avança para a próxima letra (pu espaço) da sequência de letras
+        if(letras[i] == NULL) xpto = 1; //caso o próximo caractere seja nulo ('\0'), o loop deverá parar, pois não terá mais letras para serem verificadas
+        }
+    return;
+}
